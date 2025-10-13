@@ -1,9 +1,10 @@
 package req
 
 import (
-	"github.com/imroc/req/v3/internal/dump"
 	"io"
 	"os"
+
+	"github.com/imroc/req/v3/internal/dump"
 )
 
 // DumpOptions controls the dump behavior.
@@ -20,6 +21,8 @@ type DumpOptions struct {
 	ResponseHeader       bool
 	ResponseBody         bool
 	Async                bool
+	RequestBodyFormat    dump.BodyFormatter
+	ResponseBodyFormat   dump.BodyFormatter
 }
 
 // Clone return a copy of DumpOptions
@@ -33,6 +36,16 @@ func (do *DumpOptions) Clone() *DumpOptions {
 
 type dumpOptions struct {
 	*DumpOptions
+}
+
+// RequestBodyFormatter implements dump.Options.
+func (o dumpOptions) RequestBodyFormatter() dump.BodyFormatter {
+	return o.RequestBodyFormat
+}
+
+// ResponseBodyFormatter implements dump.Options.
+func (o dumpOptions) ResponseBodyFormatter() dump.BodyFormatter {
+	return o.ResponseBodyFormat
 }
 
 func (o dumpOptions) Output() io.Writer {
